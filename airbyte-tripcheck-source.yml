@@ -1,0 +1,1799 @@
+version: 6.5.2
+
+type: DeclarativeSource
+
+check:
+  type: CheckStream
+  stream_names:
+    - Incidents (Portland)
+
+definitions:
+  streams:
+    CLS Inventory:
+      type: DeclarativeStream
+      name: CLS Inventory
+      retriever:
+        type: SimpleRetriever
+        requester:
+          $ref: "#/definitions/base_requester"
+          path: /Cls/Inventory
+          http_method: GET
+        record_selector:
+          type: RecordSelector
+          extractor:
+            type: DpathExtractor
+            field_path:
+              - cls-inventory-items
+          schema_normalization: Default
+      schema_loader:
+        type: InlineSchemaLoader
+        schema:
+          $ref: "#/schemas/CLS Inventory"
+    CLS Speed Data:
+      type: DeclarativeStream
+      name: CLS Speed Data
+      retriever:
+        type: SimpleRetriever
+        requester:
+          $ref: "#/definitions/base_requester"
+          path: Cls/Speed
+          http_method: GET
+        record_selector:
+          type: RecordSelector
+          extractor:
+            type: DpathExtractor
+            field_path:
+              - CLS-inventory
+      schema_loader:
+        type: InlineSchemaLoader
+        schema:
+          $ref: "#/schemas/CLS Speed Data"
+    CLS Length Data:
+      type: DeclarativeStream
+      name: CLS Length Data
+      retriever:
+        type: SimpleRetriever
+        requester:
+          $ref: "#/definitions/base_requester"
+          path: Cls/Length
+          http_method: GET
+        record_selector:
+          type: RecordSelector
+          extractor:
+            type: DpathExtractor
+            field_path:
+              - CLS-inventory
+          schema_normalization: Default
+      schema_loader:
+        type: InlineSchemaLoader
+        schema:
+          $ref: "#/schemas/CLS Length Data"
+    RWIS Inventory V2:
+      type: DeclarativeStream
+      name: RWIS Inventory V2
+      retriever:
+        type: SimpleRetriever
+        requester:
+          $ref: "#/definitions/base_requester"
+          path: v2/Rwis/Inventory
+          http_method: GET
+        record_selector:
+          type: RecordSelector
+          extractor:
+            type: DpathExtractor
+            field_path:
+              - ess-site-list
+          schema_normalization: Default
+      primary_key:
+        - station-id
+      schema_loader:
+        type: InlineSchemaLoader
+        schema:
+          $ref: "#/schemas/RWIS Inventory V2"
+    Incidents (Portland):
+      type: DeclarativeStream
+      name: Incidents (Portland)
+      retriever:
+        type: SimpleRetriever
+        requester:
+          $ref: "#/definitions/base_requester"
+          path: Incidents?Bounds=-122.875228,45.414915,-122.631469,45.559331
+          http_method: GET
+        record_selector:
+          type: RecordSelector
+          extractor:
+            type: DpathExtractor
+            field_path:
+              - incidents
+          schema_normalization: Default
+      primary_key:
+        - incident-id
+      schema_loader:
+        type: InlineSchemaLoader
+        schema:
+          $ref: "#/schemas/Incidents (Portland)"
+    DMS Status (Portland):
+      type: DeclarativeStream
+      name: DMS Status (Portland)
+      retriever:
+        type: SimpleRetriever
+        requester:
+          $ref: "#/definitions/base_requester"
+          path: /Dms/Status?Bounds=-122.875228,45.414915,-122.631469,45.559331
+          http_method: GET
+        record_selector:
+          type: RecordSelector
+          extractor:
+            type: DpathExtractor
+            field_path:
+              - dmsItems
+          schema_normalization: Default
+      primary_key:
+        - device-id
+      schema_loader:
+        type: InlineSchemaLoader
+        schema:
+          $ref: "#/schemas/DMS Status (Portland)"
+    "Metadata: Event Types":
+      type: DeclarativeStream
+      name: "Metadata: Event Types"
+      retriever:
+        type: SimpleRetriever
+        requester:
+          $ref: "#/definitions/base_requester"
+          path: Incidents/Metadata
+          http_method: GET
+        record_selector:
+          type: RecordSelector
+          extractor:
+            type: DpathExtractor
+            field_path:
+              - incident-metadata-items
+              - event-types
+      primary_key:
+        - id
+      schema_loader:
+        type: InlineSchemaLoader
+        schema:
+          $ref: "#/schemas/Metadata: Event Types"
+    Multnomah Falls Parking:
+      type: DeclarativeStream
+      name: Multnomah Falls Parking
+      retriever:
+        type: SimpleRetriever
+        requester:
+          $ref: "#/definitions/base_requester"
+          path: MFParking
+          http_method: GET
+        record_selector:
+          type: RecordSelector
+          extractor:
+            type: DpathExtractor
+            field_path:
+              - parkingLots
+      schema_loader:
+        type: InlineSchemaLoader
+        schema:
+          $ref: "#/schemas/Multnomah Falls Parking"
+    "Metadata: Event Subtypes":
+      type: DeclarativeStream
+      name: "Metadata: Event Subtypes"
+      retriever:
+        type: SimpleRetriever
+        requester:
+          $ref: "#/definitions/base_requester"
+          path: Incidents/Metadata
+          http_method: GET
+        record_selector:
+          type: RecordSelector
+          extractor:
+            type: DpathExtractor
+            field_path:
+              - incident-metadata-items
+              - event-subtypes
+      primary_key:
+        - id
+      schema_loader:
+        type: InlineSchemaLoader
+        schema:
+          $ref: "#/schemas/Metadata: Event Subtypes"
+    CCTV Inventory (Portland):
+      type: DeclarativeStream
+      name: CCTV Inventory (Portland)
+      retriever:
+        type: SimpleRetriever
+        requester:
+          $ref: "#/definitions/base_requester"
+          path: Cctv/Inventory?Bounds=-122.875228,45.414915,-122.631469,45.559331
+          http_method: GET
+        record_selector:
+          type: RecordSelector
+          extractor:
+            type: DpathExtractor
+            field_path:
+              - CCTVInventoryRequest
+          schema_normalization: Default
+      primary_key:
+        - device-id
+      schema_loader:
+        type: InlineSchemaLoader
+        schema:
+          $ref: "#/schemas/CCTV Inventory (Portland)"
+    "Metadata: Road Conditions":
+      type: DeclarativeStream
+      name: "Metadata: Road Conditions"
+      retriever:
+        type: SimpleRetriever
+        requester:
+          $ref: "#/definitions/base_requester"
+          path: RW/Metadata
+          http_method: GET
+        record_selector:
+          type: RecordSelector
+          extractor:
+            type: DpathExtractor
+            field_path:
+              - road-weather-items
+              - road-condition-list
+          schema_normalization: Default
+      schema_loader:
+        type: InlineSchemaLoader
+        schema:
+          $ref: "#/schemas/Metadata: Road Conditions"
+    Local Incidents (Portland):
+      type: DeclarativeStream
+      name: Local Incidents (Portland)
+      retriever:
+        type: SimpleRetriever
+        requester:
+          $ref: "#/definitions/base_requester"
+          path: Tle/Events?Bounds=-122.875228,45.414915,-122.631469,45.559331
+          http_method: GET
+        record_selector:
+          type: RecordSelector
+          extractor:
+            type: DpathExtractor
+            field_path:
+              - Incidents
+          schema_normalization: Default
+      primary_key:
+        - Id
+      schema_loader:
+        type: InlineSchemaLoader
+        schema:
+          $ref: "#/schemas/Local Incidents (Portland)"
+    Traffic Detector Ramp Data:
+      type: DeclarativeStream
+      name: Traffic Detector Ramp Data
+      retriever:
+        type: SimpleRetriever
+        requester:
+          $ref: "#/definitions/base_requester"
+          path: TrafficDetector/Ramp
+          http_method: GET
+        record_selector:
+          type: RecordSelector
+          extractor:
+            type: DpathExtractor
+            field_path:
+              - ramp-meter-status-items
+      schema_loader:
+        type: InlineSchemaLoader
+        schema:
+          $ref: "#/schemas/Traffic Detector Ramp Data"
+    "Metadata: Weather Conditions":
+      type: DeclarativeStream
+      name: "Metadata: Weather Conditions"
+      retriever:
+        type: SimpleRetriever
+        requester:
+          $ref: "#/definitions/base_requester"
+          path: RW/Metadata
+          http_method: GET
+        record_selector:
+          type: RecordSelector
+          extractor:
+            type: DpathExtractor
+            field_path:
+              - road-weather-items
+              - weather-condition-list
+          schema_normalization: Default
+      schema_loader:
+        type: InlineSchemaLoader
+        schema:
+          $ref: "#/schemas/Metadata: Weather Conditions"
+    Traffic Detector Roadway Data:
+      type: DeclarativeStream
+      name: Traffic Detector Roadway Data
+      retriever:
+        type: SimpleRetriever
+        requester:
+          $ref: "#/definitions/base_requester"
+          path: TrafficDetector/Roadway
+          http_method: GET
+        record_selector:
+          type: RecordSelector
+          extractor:
+            type: DpathExtractor
+            field_path:
+              - detector-data-items
+      schema_loader:
+        type: InlineSchemaLoader
+        schema:
+          $ref: "#/schemas/Traffic Detector Roadway Data"
+    Traffic Detector Inventory Data:
+      type: DeclarativeStream
+      name: Traffic Detector Inventory Data
+      retriever:
+        type: SimpleRetriever
+        requester:
+          $ref: "#/definitions/base_requester"
+          path: TrafficDetector/Inventory
+          http_method: GET
+        record_selector:
+          type: RecordSelector
+          extractor:
+            type: DpathExtractor
+            field_path:
+              - traffic-detector-list
+      schema_loader:
+        type: InlineSchemaLoader
+        schema:
+          $ref: "#/schemas/Traffic Detector Inventory Data"
+    "Metadata: DMS Inventory (Portland)":
+      type: DeclarativeStream
+      name: "Metadata: DMS Inventory (Portland)"
+      retriever:
+        type: SimpleRetriever
+        requester:
+          $ref: "#/definitions/base_requester"
+          path: /Dms/Inventory?Bounds=-122.875228,45.414915,-122.631469,45.559331
+          http_method: GET
+        record_selector:
+          type: RecordSelector
+          extractor:
+            type: DpathExtractor
+            field_path:
+              - dms-inventory-items
+          schema_normalization: Default
+      schema_loader:
+        type: InlineSchemaLoader
+        schema:
+          $ref: "#/schemas/Metadata: DMS Inventory (Portland)"
+    "Metadata: Driving Restriction List":
+      type: DeclarativeStream
+      name: "Metadata: Driving Restriction List"
+      retriever:
+        type: SimpleRetriever
+        requester:
+          $ref: "#/definitions/base_requester"
+          path: RW/Metadata
+          http_method: GET
+        record_selector:
+          type: RecordSelector
+          extractor:
+            type: DpathExtractor
+            field_path:
+              - road-weather-items
+              - driving-restriction-list
+          schema_normalization: Default
+      schema_loader:
+        type: InlineSchemaLoader
+        schema:
+          $ref: "#/schemas/Metadata: Driving Restriction List"
+    Portland RWIS Status V2 (Portland):
+      type: DeclarativeStream
+      name: Portland RWIS Status V2 (Portland)
+      retriever:
+        type: SimpleRetriever
+        requester:
+          $ref: "#/definitions/base_requester"
+          path: v2/Rwis/Status?Bounds=-122.875228,45.414915,-122.631469,45.559331
+          http_method: GET
+        record_selector:
+          type: RecordSelector
+          extractor:
+            type: DpathExtractor
+            field_path:
+              - WeatherStations
+          schema_normalization: Default
+      schema_loader:
+        type: InlineSchemaLoader
+        schema:
+          $ref: "#/schemas/Portland RWIS Status V2 (Portland)"
+    "Metadata: Commercial Vehicle Restriction List":
+      type: DeclarativeStream
+      name: "Metadata: Commercial Vehicle Restriction List"
+      retriever:
+        type: SimpleRetriever
+        requester:
+          $ref: "#/definitions/base_requester"
+          path: RW/Metadata
+          http_method: GET
+        record_selector:
+          type: RecordSelector
+          extractor:
+            type: DpathExtractor
+            field_path:
+              - road-weather-items
+              - commercial-vehicle-restriction-list
+          schema_normalization: Default
+      schema_loader:
+        type: InlineSchemaLoader
+        schema:
+          $ref: "#/schemas/Metadata: Commercial Vehicle Restriction List"
+  base_requester:
+    type: HttpRequester
+    url_base: http://api.odot.state.or.us/tripcheck/
+    authenticator:
+      type: ApiKeyAuthenticator
+      api_token: "{{ config[\"api_key\"] }}"
+      inject_into:
+        type: RequestOption
+        field_name: Ocp-Apim-Subscription-Key
+        inject_into: header
+
+streams:
+  - $ref: "#/definitions/streams/Incidents (Portland)"
+  - $ref: "#/definitions/streams/Local Incidents (Portland)"
+  - $ref: "#/definitions/streams/Metadata: Event Types"
+  - $ref: "#/definitions/streams/Metadata: Weather Conditions"
+  - $ref: "#/definitions/streams/Metadata: Event Subtypes"
+  - $ref: "#/definitions/streams/Metadata: Road Conditions"
+  - $ref: "#/definitions/streams/Metadata: Commercial Vehicle Restriction List"
+  - $ref: "#/definitions/streams/Metadata: Driving Restriction List"
+  - $ref: "#/definitions/streams/RWIS Inventory V2"
+  - $ref: "#/definitions/streams/Portland RWIS Status V2 (Portland)"
+  - $ref: "#/definitions/streams/DMS Status (Portland)"
+  - $ref: "#/definitions/streams/Metadata: DMS Inventory (Portland)"
+  - $ref: "#/definitions/streams/CCTV Inventory (Portland)"
+  - $ref: "#/definitions/streams/CLS Inventory"
+  - $ref: "#/definitions/streams/CLS Length Data"
+  - $ref: "#/definitions/streams/CLS Speed Data"
+  - $ref: "#/definitions/streams/Multnomah Falls Parking"
+  - $ref: "#/definitions/streams/Traffic Detector Inventory Data"
+  - $ref: "#/definitions/streams/Traffic Detector Ramp Data"
+  - $ref: "#/definitions/streams/Traffic Detector Roadway Data"
+
+spec:
+  type: Spec
+  connection_specification:
+    type: object
+    $schema: http://json-schema.org/draft-07/schema#
+    required:
+      - api_key
+    properties:
+      api_key:
+        type: string
+        order: 0
+        title: API Key
+        airbyte_secret: true
+    additionalProperties: true
+
+metadata:
+  assist: {}
+  testedStreams:
+    CLS Inventory:
+      hasRecords: true
+      streamHash: 94534347354414aa28d956cc160a4fb46e98b131
+      hasResponse: true
+      primaryKeysAreUnique: true
+      primaryKeysArePresent: true
+      responsesAreSuccessful: true
+    CLS Speed Data:
+      hasRecords: true
+      streamHash: cf9016f2523c8d7ae3eeb26978ab63275e61a9db
+      hasResponse: true
+      primaryKeysAreUnique: true
+      primaryKeysArePresent: true
+      responsesAreSuccessful: true
+    CLS Length Data:
+      hasRecords: true
+      streamHash: 9540afb008e2608925db514e7e238ecad41c48f2
+      hasResponse: true
+      primaryKeysAreUnique: true
+      primaryKeysArePresent: true
+      responsesAreSuccessful: true
+    RWIS Inventory V2:
+      hasRecords: true
+      streamHash: 40dcbb8b404a046f18e5a57de939d441b8ef0bbd
+      hasResponse: true
+      primaryKeysAreUnique: true
+      primaryKeysArePresent: true
+      responsesAreSuccessful: true
+    Incidents (Portland):
+      hasRecords: true
+      streamHash: 5801f9e336c8f09712ed1b8c1b2a0e775f94ea60
+      hasResponse: true
+      primaryKeysAreUnique: true
+      primaryKeysArePresent: true
+      responsesAreSuccessful: true
+    DMS Status (Portland):
+      hasRecords: true
+      streamHash: dafb59fff3e977ef06e5cd7c9cc73417ecbfa42c
+      hasResponse: true
+      primaryKeysAreUnique: true
+      primaryKeysArePresent: true
+      responsesAreSuccessful: true
+    "Metadata: Event Types":
+      hasRecords: true
+      streamHash: dab17b6485b8b19598ae12bc99bc036a1556e6a0
+      hasResponse: true
+      primaryKeysAreUnique: true
+      primaryKeysArePresent: true
+      responsesAreSuccessful: true
+    Multnomah Falls Parking:
+      hasRecords: true
+      streamHash: c2071a7a8090622714a2ec2327a7c643a4f6da80
+      hasResponse: true
+      primaryKeysAreUnique: true
+      primaryKeysArePresent: true
+      responsesAreSuccessful: true
+    "Metadata: Event Subtypes":
+      hasRecords: true
+      streamHash: 38c082a538b003af1cf1d59fb1d78b66ab9cadfd
+      hasResponse: true
+      primaryKeysAreUnique: true
+      primaryKeysArePresent: true
+      responsesAreSuccessful: true
+    CCTV Inventory (Portland):
+      hasRecords: true
+      streamHash: 435cfd3139f720898a5e74ac29540dfecc938e45
+      hasResponse: true
+      primaryKeysAreUnique: true
+      primaryKeysArePresent: true
+      responsesAreSuccessful: true
+    "Metadata: Road Conditions":
+      hasRecords: true
+      streamHash: 58756b79ad0c61575bd6c1cbed5868067236681a
+      hasResponse: true
+      primaryKeysAreUnique: true
+      primaryKeysArePresent: true
+      responsesAreSuccessful: true
+    Local Incidents (Portland):
+      hasRecords: true
+      streamHash: f4067efe7e741a9df2d126f96193b99b273adf46
+      hasResponse: true
+      primaryKeysAreUnique: true
+      primaryKeysArePresent: true
+      responsesAreSuccessful: true
+    Traffic Detector Ramp Data:
+      hasRecords: true
+      streamHash: 2e1d2633f7ea3ac34e89695165a5434b0a0abae5
+      hasResponse: true
+      primaryKeysAreUnique: true
+      primaryKeysArePresent: true
+      responsesAreSuccessful: true
+    "Metadata: Weather Conditions":
+      hasRecords: true
+      streamHash: 96873def8bd5513fa0f8671f9a3bcd9de3268fa1
+      hasResponse: true
+      primaryKeysAreUnique: true
+      primaryKeysArePresent: true
+      responsesAreSuccessful: true
+    Traffic Detector Roadway Data:
+      hasRecords: true
+      streamHash: 94487c4f1fe4d3ec638ee50b5896ea969b5bd729
+      hasResponse: true
+      primaryKeysAreUnique: true
+      primaryKeysArePresent: true
+      responsesAreSuccessful: true
+    Traffic Detector Inventory Data:
+      hasRecords: true
+      streamHash: b9821cf8fd5fe984a8e31066286da3f31841dae1
+      hasResponse: true
+      primaryKeysAreUnique: true
+      primaryKeysArePresent: true
+      responsesAreSuccessful: true
+    "Metadata: DMS Inventory (Portland)":
+      hasRecords: true
+      streamHash: 2d7aae8a07a1cd735aa319a2cbe48517205a9b1a
+      hasResponse: true
+      primaryKeysAreUnique: true
+      primaryKeysArePresent: true
+      responsesAreSuccessful: true
+    "Metadata: Driving Restriction List":
+      hasRecords: true
+      streamHash: 11452356e5dce02a87c4a7e81073f6749b8639bf
+      hasResponse: true
+      primaryKeysAreUnique: true
+      primaryKeysArePresent: true
+      responsesAreSuccessful: true
+    Portland RWIS Status V2 (Portland):
+      hasRecords: true
+      streamHash: e5aba935c5bb8a38cd2d720d4f2c61d2b3ea63ab
+      hasResponse: true
+      primaryKeysAreUnique: true
+      primaryKeysArePresent: true
+      responsesAreSuccessful: true
+    "Metadata: Commercial Vehicle Restriction List":
+      hasRecords: true
+      streamHash: 3b98d628f60992698f8e6a55d84c3dbb57cd3e57
+      hasResponse: true
+      primaryKeysAreUnique: true
+      primaryKeysArePresent: true
+      responsesAreSuccessful: true
+  autoImportSchema:
+    CLS Inventory: true
+    CLS Speed Data: true
+    CLS Length Data: true
+    RWIS Inventory V2: true
+    Incidents (Portland): true
+    DMS Status (Portland): true
+    "Metadata: Event Types": true
+    Multnomah Falls Parking: true
+    "Metadata: Event Subtypes": true
+    CCTV Inventory (Portland): true
+    "Metadata: Road Conditions": true
+    Local Incidents (Portland): true
+    Traffic Detector Ramp Data: true
+    "Metadata: Weather Conditions": true
+    Traffic Detector Roadway Data: true
+    Traffic Detector Inventory Data: true
+    "Metadata: DMS Inventory (Portland)": true
+    "Metadata: Driving Restriction List": true
+    Portland RWIS Status V2 (Portland): true
+    "Metadata: Commercial Vehicle Restriction List": true
+
+schemas:
+  CLS Inventory:
+    type: object
+    $schema: http://json-schema.org/schema#
+    properties:
+      type:
+        type:
+          - string
+          - "null"
+      bin-number:
+        type:
+          - number
+          - "null"
+      station-id:
+        type:
+          - number
+          - "null"
+      configure-time:
+        type:
+          - string
+          - "null"
+      bin-value-description:
+        type:
+          - number
+          - "null"
+    additionalProperties: true
+  CLS Speed Data:
+    type: object
+    $schema: http://json-schema.org/schema#
+    properties:
+      lane:
+        type:
+          - number
+          - "null"
+      bin-count:
+        type:
+          - number
+          - "null"
+      bin-number:
+        type:
+          - number
+          - "null"
+      station-id:
+        type:
+          - number
+          - "null"
+      recorded-date:
+        type:
+          - string
+          - "null"
+    additionalProperties: true
+  CLS Length Data:
+    type: object
+    $schema: http://json-schema.org/schema#
+    properties:
+      lane:
+        type:
+          - number
+          - "null"
+      bin-count:
+        type:
+          - number
+          - "null"
+      bin-number:
+        type:
+          - number
+          - "null"
+      station-id:
+        type:
+          - number
+          - "null"
+      recorded-date:
+        type:
+          - string
+          - "null"
+    additionalProperties: true
+  RWIS Inventory V2:
+    type: object
+    $schema: http://json-schema.org/schema#
+    required:
+      - station-id
+    properties:
+      latitude:
+        type:
+          - number
+          - "null"
+      route-id:
+        type:
+          - string
+          - "null"
+      elevation:
+        type:
+          - number
+          - "null"
+      longitude:
+        type:
+          - number
+          - "null"
+      milepoint:
+        type:
+          - number
+          - "null"
+      station-id:
+        type: string
+      station-name:
+        type:
+          - string
+          - "null"
+      device-update-time:
+        type:
+          - string
+          - "null"
+      ess-inventory-list:
+        type:
+          - array
+          - "null"
+        items:
+          type:
+            - object
+            - "null"
+          properties:
+            device-id:
+              type:
+                - number
+                - "null"
+            device-name:
+              type:
+                - string
+                - "null"
+            device-description:
+              type:
+                - string
+                - "null"
+    additionalProperties: true
+  Incidents (Portland):
+    type: object
+    $schema: http://json-schema.org/schema#
+    required:
+      - incident-id
+    properties:
+      files:
+        type:
+          - array
+          - "null"
+      comments:
+        type:
+          - string
+          - "null"
+      event-id:
+        type:
+          - string
+          - "null"
+      headline:
+        type:
+          - string
+          - "null"
+      info-url:
+        type:
+          - string
+          - "null"
+      location:
+        type:
+          - object
+          - "null"
+        properties:
+          hwy-id:
+            type:
+              - string
+              - "null"
+          route-id:
+            type:
+              - string
+              - "null"
+          direction:
+            type:
+              - string
+              - "null"
+          end-location:
+            type:
+              - object
+              - "null"
+            properties:
+              end-lat:
+                type:
+                  - number
+                  - "null"
+              end-long:
+                type:
+                  - number
+                  - "null"
+              end-milepost:
+                type:
+                  - number
+                  - "null"
+              location-desc:
+                type:
+                  - string
+                  - "null"
+              end-point-geometry-wkt:
+                type:
+                  - string
+                  - "null"
+          location-name:
+            type:
+              - string
+              - "null"
+          start-location:
+            type:
+              - object
+              - "null"
+            properties:
+              start-lat:
+                type:
+                  - number
+                  - "null"
+              start-long:
+                type:
+                  - number
+                  - "null"
+              location-desc:
+                type:
+                  - string
+                  - "null"
+              start-milepost:
+                type:
+                  - number
+                  - "null"
+              start-point-geometry-wkt:
+                type:
+                  - string
+                  - "null"
+          geometry-wkt-line:
+            type:
+              - string
+              - "null"
+      schedule:
+        type:
+          - object
+          - "null"
+        properties:
+          project-schedule:
+            type:
+              - object
+              - "null"
+            properties:
+              end-date-time:
+                type:
+                  - string
+                  - "null"
+              start-date-time:
+                type:
+                  - string
+                  - "null"
+      impact-id:
+        type:
+          - string
+          - "null"
+      is-active:
+        type:
+          - string
+          - "null"
+      create-time:
+        type:
+          - string
+          - "null"
+      impact-desc:
+        type:
+          - string
+          - "null"
+      incident-id:
+        type: string
+      update-time:
+        type:
+          - string
+          - "null"
+      travel-lanes:
+        type:
+          - object
+          - "null"
+        properties:
+          affected-lanes:
+            type:
+              - array
+              - "null"
+            items:
+              type:
+                - object
+                - "null"
+              properties:
+                lane-id:
+                  type:
+                    - string
+                    - "null"
+                direction:
+                  type:
+                    - string
+                    - "null"
+                lane-type:
+                  type:
+                    - string
+                    - "null"
+          lane-edge-reference:
+            type:
+              - string
+              - "null"
+          decreasing-direction:
+            type:
+              - string
+              - "null"
+          increasing-direction:
+            type:
+              - string
+              - "null"
+          decreasing-lane-count:
+            type:
+              - number
+              - "null"
+          increasing-lane-count:
+            type:
+              - number
+              - "null"
+      event-type-id:
+        type:
+          - string
+          - "null"
+      off-hwy-lanes:
+        type:
+          - object
+          - "null"
+        properties:
+          affected-lanes:
+            type:
+              - array
+              - "null"
+      event-subtype-id:
+        type:
+          - string
+          - "null"
+    additionalProperties: true
+  DMS Status (Portland):
+    type: object
+    $schema: http://json-schema.org/schema#
+    required:
+      - device-id
+    properties:
+      device-id:
+        type: number
+      tocsEventId:
+        type:
+          - string
+          - "null"
+      dms-device-status:
+        type:
+          - string
+          - "null"
+      dmsCurrentMessage:
+        type:
+          - object
+          - "null"
+        properties:
+          phase1Line1:
+            type:
+              - string
+              - "null"
+          phase1Line2:
+            type:
+              - string
+              - "null"
+          phase1Line3:
+            type:
+              - string
+              - "null"
+          phase2Line1:
+            type:
+              - string
+              - "null"
+          phase2Line2:
+            type:
+              - string
+              - "null"
+          phase2Line3:
+            type:
+              - string
+              - "null"
+    additionalProperties: true
+  "Metadata: Event Types":
+    type: object
+    $schema: http://json-schema.org/schema#
+    required:
+      - id
+    properties:
+      id:
+        type: string
+      name:
+        type:
+          - string
+          - "null"
+    additionalProperties: true
+  Multnomah Falls Parking:
+    type: object
+    $schema: http://json-schema.org/schema#
+    properties:
+      parkingLotDataArray:
+        type:
+          - array
+          - "null"
+        items:
+          type:
+            - object
+            - "null"
+          properties:
+            UD_DTTM:
+              type:
+                - string
+                - "null"
+            LOT_SUM_ID:
+              type:
+                - number
+                - "null"
+            MAN_STAT_CD:
+              type:
+                - number
+                - "null"
+            GATE_1_ALM_NO:
+              type:
+                - number
+                - "null"
+            GATE_2_ALM_NO:
+              type:
+                - number
+                - "null"
+            GATE_3_ALM_NO:
+              type:
+                - number
+                - "null"
+            GATE_4_ALM_NO:
+              type:
+                - number
+                - "null"
+            CAR_CNT_DAY_NO:
+              type:
+                - number
+                - "null"
+            CUR_CAR_CNT_NO:
+              type:
+                - number
+                - "null"
+            LOT_CAP_PCT_NO:
+              type:
+                - number
+                - "null"
+            GATE_SYS_STAT_NO:
+              type:
+                - number
+                - "null"
+            BOS_1_STAT_ALM_NO:
+              type:
+                - number
+                - "null"
+            BOS_2_STAT_ALM_NO:
+              type:
+                - number
+                - "null"
+            BOS_3_STAT_ALM_NO:
+              type:
+                - number
+                - "null"
+            BOS_4_STAT_ALM_NO:
+              type:
+                - number
+                - "null"
+            GATE_1_STAT_POS_NO:
+              type:
+                - number
+                - "null"
+            GATE_2_STAT_POS_NO:
+              type:
+                - number
+                - "null"
+            GATE_3_STAT_POS_NO:
+              type:
+                - number
+                - "null"
+            GATE_4_STAT_POS_NO:
+              type:
+                - number
+                - "null"
+            BLK_OUT_SIGN_POS_NO:
+              type:
+                - number
+                - "null"
+            GATE_1_DTCTR_FAIL_CD_NO:
+              type:
+                - number
+                - "null"
+            GATE_2_DTCTR_FAIL_CD_NO:
+              type:
+                - number
+                - "null"
+            GATE_3_DTCTR_FAIL_CD_NO:
+              type:
+                - number
+                - "null"
+            GATE_4_DTCTR_FAIL_CD_NO:
+              type:
+                - number
+                - "null"
+            GATE_1_DTCTR_FAIL_ALM_NO:
+              type:
+                - number
+                - "null"
+            GATE_2_DTCTR_FAIL_ALM_NO:
+              type:
+                - number
+                - "null"
+            GATE_3_DTCTR_FAIL_ALM_NO:
+              type:
+                - number
+                - "null"
+            GATE_4_DTCTR_FAIL_ALM_NO:
+              type:
+                - number
+                - "null"
+            GATE_STAT_OPEN_THRSHLD_NO:
+              type:
+                - number
+                - "null"
+            GATE_STAT_CLOSE_THRSHLD_NO:
+              type:
+                - number
+                - "null"
+      parkingLotCalculation:
+        type:
+          - object
+          - "null"
+        properties:
+          location:
+            type:
+              - object
+              - "null"
+            properties:
+              latitude:
+                type:
+                  - number
+                  - "null"
+              longitude:
+                type:
+                  - number
+                  - "null"
+              locationName:
+                type:
+                  - string
+                  - "null"
+          percentFull:
+            type:
+              - number
+              - "null"
+          last-update-time:
+            type:
+              - string
+              - "null"
+          percentFullMessage:
+            type:
+              - string
+              - "null"
+    additionalProperties: true
+  "Metadata: Event Subtypes":
+    type: object
+    $schema: http://json-schema.org/schema#
+    required:
+      - id
+    properties:
+      id:
+        type: string
+      name:
+        type:
+          - string
+          - "null"
+    additionalProperties: true
+  CCTV Inventory (Portland):
+    type: object
+    $schema: http://json-schema.org/schema#
+    required:
+      - device-id
+    properties:
+      hwy-id:
+        type:
+          - string
+          - "null"
+      cctv-url:
+        type:
+          - string
+          - "null"
+      latitude:
+        type:
+          - number
+          - "null"
+      route-id:
+        type:
+          - string
+          - "null"
+      device-id:
+        type: number
+      longitude:
+        type:
+          - number
+          - "null"
+      milepoint:
+        type:
+          - number
+          - "null"
+      cctv-other:
+        type:
+          - string
+          - "null"
+      device-name:
+        type:
+          - string
+          - "null"
+      last-update-time:
+        type:
+          - string
+          - "null"
+    additionalProperties: true
+  "Metadata: Road Conditions":
+    type: object
+    $schema: http://json-schema.org/schema#
+    properties:
+      road-cond-id:
+        type:
+          - number
+          - "null"
+      road-cond-desc:
+        type:
+          - string
+          - "null"
+    additionalProperties: true
+  Local Incidents (Portland):
+    type: object
+    $schema: http://json-schema.org/schema#
+    required:
+      - Id
+    properties:
+      Id:
+        type: number
+      Type:
+        type:
+          - string
+          - "null"
+      EndLat:
+        type:
+          - number
+          - "null"
+      Impact:
+        type:
+          - string
+          - "null"
+      EndLong:
+        type:
+          - number
+          - "null"
+      Comments:
+        type:
+          - string
+          - "null"
+      EventEnd:
+        type:
+          - string
+          - "null"
+      Headline:
+        type:
+          - string
+          - "null"
+      StartLat:
+        type:
+          - number
+          - "null"
+      Direction:
+        type:
+          - string
+          - "null"
+      StartLong:
+        type:
+          - number
+          - "null"
+      CreateTime:
+        type:
+          - string
+          - "null"
+      EventStart:
+        type:
+          - string
+          - "null"
+      UpdateTime:
+        type:
+          - string
+          - "null"
+      ContactName:
+        type:
+          - string
+          - "null"
+      GeometryWkt:
+        type:
+          - string
+          - "null"
+      ContactEmail:
+        type:
+          - string
+          - "null"
+      ContactPhone:
+        type:
+          - string
+          - "null"
+      SourceAgency:
+        type:
+          - string
+          - "null"
+      ContactOrganization:
+        type:
+          - string
+          - "null"
+      LocationDescription:
+        type:
+          - string
+          - "null"
+    additionalProperties: true
+  Traffic Detector Ramp Data:
+    type: object
+    $schema: http://json-schema.org/schema#
+    properties:
+      metered-lane-list:
+        type:
+          - array
+          - "null"
+        items:
+          type:
+            - object
+            - "null"
+          properties:
+            metered-lane:
+              type:
+                - object
+                - "null"
+              properties:
+                meter-requested-plan:
+                  type:
+                    - number
+                    - "null"
+                meter-requested-rate:
+                  type:
+                    - number
+                    - "null"
+                meter-implemented-plan:
+                  type:
+                    - number
+                    - "null"
+                meter-implemented-rate:
+                  type:
+                    - number
+                    - "null"
+                meter-requested-action:
+                  type:
+                    - number
+                    - "null"
+                meter-implemented-action:
+                  type:
+                    - number
+                    - "null"
+                metered-lane-vehicle-count:
+                  type:
+                    - number
+                    - "null"
+                implemented-meter-command-source:
+                  type:
+                    - number
+                    - "null"
+                meter-requested-vehicles-per-green:
+                  type:
+                    - number
+                    - "null"
+                meter-implemented-vehicles-per-green:
+                  type:
+                    - number
+                    - "null"
+      mainline-flow-rate:
+        type:
+          - number
+          - "null"
+      device-status-header:
+        type:
+          - object
+          - "null"
+        properties:
+          ramp-id:
+            type:
+              - number
+              - "null"
+          center-id:
+            type:
+              - number
+              - "null"
+          device-status:
+            type:
+              - string
+              - "null"
+          last-comm-time:
+            type:
+              - string
+              - "null"
+          response-plan-id:
+            type:
+              - number
+              - "null"
+      mainline-vehicle-speed:
+        type:
+          - number
+          - "null"
+      mainline-vehicle-occupancy:
+        type:
+          - number
+          - "null"
+    additionalProperties: true
+  "Metadata: Weather Conditions":
+    type: object
+    $schema: http://json-schema.org/schema#
+    properties:
+      weather-id:
+        type:
+          - number
+          - "null"
+      weather-desc:
+        type:
+          - string
+          - "null"
+    additionalProperties: true
+  Traffic Detector Roadway Data:
+    type: object
+    $schema: http://json-schema.org/schema#
+    properties:
+      detector-list:
+        type:
+          - object
+          - "null"
+        properties:
+          detector-data-detail:
+            type:
+              - object
+              - "null"
+            properties:
+              lane:
+                type:
+                  - number
+                  - "null"
+              station-id:
+                type:
+                  - number
+                  - "null"
+              detector-id:
+                type:
+                  - number
+                  - "null"
+              vehicle-count:
+                type:
+                  - number
+                  - "null"
+              vehicle-speed:
+                type:
+                  - number
+                  - "null"
+              vehicle-occupancy:
+                type:
+                  - number
+                  - "null"
+              detection-time-stamp:
+                type:
+                  - string
+                  - "null"
+              detector-reliability:
+                type:
+                  - number
+                  - "null"
+    additionalProperties: true
+  Traffic Detector Inventory Data:
+    type: object
+    $schema: http://json-schema.org/schema#
+    properties:
+      location:
+        type:
+          - object
+          - "null"
+        properties:
+          latitude:
+            type:
+              - number
+              - "null"
+          longitude:
+            type:
+              - number
+              - "null"
+          milepoint:
+            type:
+              - number
+              - "null"
+          location-id:
+            type:
+              - number
+              - "null"
+          highway-name:
+            type:
+              - string
+              - "null"
+          location-name:
+            type:
+              - string
+              - "null"
+          highway-direction:
+            type:
+              - string
+              - "null"
+      detector-station:
+        type:
+          - object
+          - "null"
+        properties:
+          item-code:
+            type:
+              - string
+              - "null"
+          ramp-list:
+            type:
+              - array
+              - "null"
+            items:
+              type:
+                - object
+                - "null"
+              properties:
+                ramp-id:
+                  type:
+                    - number
+                    - "null"
+                ramp-lanes:
+                  type:
+                    - number
+                    - "null"
+                location-id:
+                  type:
+                    - number
+                    - "null"
+          station-id:
+            type:
+              - number
+              - "null"
+          station-class:
+            type:
+              - string
+              - "null"
+          station-lanes:
+            type:
+              - number
+              - "null"
+          jurisdiction-id:
+            type:
+              - number
+              - "null"
+          roadway-detector-list:
+            type:
+              - array
+              - "null"
+            items:
+              type:
+                - object
+                - "null"
+              properties:
+                lane:
+                  type:
+                    - number
+                    - "null"
+                detector-id:
+                  type:
+                    - number
+                    - "null"
+                detector-title:
+                  type:
+                    - string
+                    - "null"
+          controller-description:
+            type:
+              - string
+              - "null"
+    additionalProperties: true
+  "Metadata: DMS Inventory (Portland)":
+    type: object
+    $schema: http://json-schema.org/schema#
+    properties:
+      class:
+        type:
+          - string
+          - "null"
+      latitude:
+        type:
+          - number
+          - "null"
+      route-id:
+        type:
+          - string
+          - "null"
+      subclass:
+        type:
+          - string
+          - "null"
+      device-id:
+        type:
+          - number
+          - "null"
+      elevation:
+        type:
+          - number
+          - "null"
+      longitude:
+        type:
+          - number
+          - "null"
+      milepoint:
+        type:
+          - number
+          - "null"
+      device-name:
+        type:
+          - string
+          - "null"
+    additionalProperties: true
+  "Metadata: Driving Restriction List":
+    type: object
+    $schema: http://json-schema.org/schema#
+    properties:
+      restriction-id:
+        type:
+          - string
+          - "null"
+      restriction-desc:
+        type:
+          - string
+          - "null"
+    additionalProperties: true
+  Portland RWIS Status V2 (Portland):
+    type: object
+    $schema: http://json-schema.org/schema#
+    properties:
+      station-id:
+        type:
+          - string
+          - "null"
+      RoadWeather:
+        type:
+          - object
+          - "null"
+        properties:
+          visibility:
+            type:
+              - number
+              - "null"
+          precip-rate:
+            type:
+              - number
+              - "null"
+          dewpoint-temp:
+            type:
+              - number
+              - "null"
+          avg-wind-speed:
+            type:
+              - number
+              - "null"
+          air-temperature:
+            type:
+              - number
+              - "null"
+          last-update-time:
+            type:
+              - string
+              - "null"
+          precip-situation:
+            type:
+              - string
+              - "null"
+          relative-humidity:
+            type:
+              - number
+              - "null"
+          avg-wind-direction:
+            type:
+              - number
+              - "null"
+          avg-wind-gust-speed:
+            type:
+              - number
+              - "null"
+          atmospheric-pressure:
+            type:
+              - number
+              - "null"
+          avg-wind-gust-direction:
+            type:
+              - number
+              - "null"
+      SurfaceCondition:
+        type:
+          - object
+          - "null"
+        properties:
+          water-depth:
+            type:
+              - number
+              - "null"
+          mobile-friction:
+            type:
+              - number
+              - "null"
+          surface-salinity:
+            type:
+              - number
+              - "null"
+          surface-freeze-point:
+            type:
+              - number
+              - "null"
+          surface-temperatures:
+            type:
+              - array
+              - "null"
+            items:
+              type:
+                - object
+                - "null"
+              properties:
+                sensor-id:
+                  type:
+                    - number
+                    - "null"
+                surface-temperature:
+                  type:
+                    - number
+                    - "null"
+    additionalProperties: true
+  "Metadata: Commercial Vehicle Restriction List":
+    type: object
+    $schema: http://json-schema.org/schema#
+    properties:
+      restriction-id:
+        type:
+          - number
+          - "null"
+      restriction-desc:
+        type:
+          - string
+          - "null"
+      restriction-type:
+        type:
+          - string
+          - "null"
+    additionalProperties: true
