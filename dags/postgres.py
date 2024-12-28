@@ -73,7 +73,6 @@ def upsert_to_postgres(table_name, df, primary_keys):
     ON CONFLICT ({', '.join(primary_keys)})
     DO UPDATE SET {update_clause}
     """
-    print(upsert_query)
 
     try:
         with engine.connect() as conn:
@@ -84,7 +83,7 @@ def upsert_to_postgres(table_name, df, primary_keys):
             conn.execute(text(f"DROP TABLE {temp_table_name}"))
     except Exception as e:
         print(f"Error during upsert: {e}")
-        return False
+        raise
 
     return True
 
