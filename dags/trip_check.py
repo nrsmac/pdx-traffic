@@ -23,6 +23,20 @@ def get_cls_inventory_df():
     df = _cast_object_columns_to_string(df)
     return df
 
+def get_cls_speed_df():
+    request_url = f"http://api.odot.state.or.us/tripcheck/Cls/Speed"
+    response = requests.get(request_url, headers={'Ocp-Apim-Subscription-Key':AUTHKEY})
+    data = json.loads(response.text)
+    last_updated = data['organization-information']['last-update-time']
+
+    cls_inventory = data['CLS-inventory']
+
+    df = pd.DataFrame(cls_inventory).apply(pd.Series)
+    df['last-update-time'] = last_updated
+
+    object_columns = df.select_dtypes(include=['object']).columns
+    df[object_columns] = df[object_columns].astype(str)
+    return df
 
 def get_rwis_inventory_df():
     request_url = f"http://api.odot.state.or.us/tripcheck/v2/Rwis/Inventory?Bounds={PDX_BOUNDS}"
@@ -70,20 +84,7 @@ def get_traffic_detector_road_data_df():
     df = _cast_object_columns_to_string(df)
     return df
 
-def get_cls_speed_df():
-    request_url = f"http://api.odot.state.or.us/tripcheck/Cls/Speed"
-    response = requests.get(request_url, headers={'Ocp-Apim-Subscription-Key':AUTHKEY})
-    data = json.loads(response.text)
-    last_updated = data['organization-information']['last-update-time']
 
-    cls_inventory = data['CLS-inventory']
-
-    df = pd.DataFrame(cls_inventory).apply(pd.Series)
-    df['last-update-time'] = last_updated
-
-    object_columns = df.select_dtypes(include=['object']).columns
-    df[object_columns] = df[object_columns].astype(str)
-    return df
 
 def get_rwis_status_df():
     request_url = f"http://api.odot.state.or.us/tripcheck/v2/Rwis/Status?Bounds={PDX_BOUNDS}"
