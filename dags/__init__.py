@@ -30,5 +30,5 @@ defs = Definitions(
         detector_schedule,
         rwis_schedule,
         cls_schedule
-    ]
+    ] 
 )
