@@ -84,6 +84,7 @@ def get_cls_speed_df():
     object_columns = df.select_dtypes(include=['object']).columns
     df[object_columns] = df[object_columns].astype(str)
     return df
+
 def get_rwis_status_df():
     request_url = f"http://api.odot.state.or.us/tripcheck/v2/Rwis/Status?Bounds={PDX_BOUNDS}"
     response = requests.get(request_url, headers={'Ocp-Apim-Subscription-Key':AUTHKEY})

@@ -1,5 +1,6 @@
 from dagster import AssetSelection, DefaultScheduleStatus, Definitions, ScheduleDefinition, load_assets_from_package_module
 from dags import assets
+from dags.io_managers import PostgresIOManager
 
 
 # Detector Data every 2 min
@@ -30,5 +31,8 @@ defs = Definitions(
         detector_schedule,
         rwis_schedule,
         cls_schedule
-    ] 
+    ],
+    resources = {
+        'postgres_io_manager': PostgresIOManager()
+    }
 )
