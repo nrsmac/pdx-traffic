@@ -1,6 +1,30 @@
 volumes:
   pgdata:
 services:
+  dagster:
+    build: .
+    depends_on:
+      - postgres
+    ports:
+      - 3000:3000
+    volumes:
+      - ./dagster_home:/dagster_home
+    restart: always
+    develop:
+      # Create a `watch` configuration to update the app
+      #
+      watch:
+        # Sync the working directory with the `/app` directory in the container
+        - action: sync
+          path: ./dags
+          target: /app/dags
+          # Exclude the project virtual environment
+          ignore:
+            - .venv/
+
+        # Rebuild the image on changes to the `pyproject.toml`
+        - action: rebuild
+          path: ./pyproject.toml
   postgres:
     image: postgres
     restart: always

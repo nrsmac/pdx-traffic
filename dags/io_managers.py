@@ -6,7 +6,7 @@ from sqlalchemy import create_engine
 class PostgresIOManager(ConfigurableIOManager):
     user: str = EnvVar('POSTGRES_USER')
     password: str = EnvVar('POSTGRES_PASSWORD')
-    host: str = 'localhost'
+    host: str = 'postgres'
     port: int = 5432
     db: str = 'postgres'
 
