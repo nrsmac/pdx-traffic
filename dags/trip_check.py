@@ -1,18 +1,21 @@
 import json
-import os
-
-from dotenv import load_dotenv
 import pandas as pd
 import requests
 
-load_dotenv()
-AUTHKEY = os.getenv('TRIPCHECK_API_KEY')
-PDX_BOUNDS = "-122.875228,45.414915,-122.631469,45.559331"
+from dags.consts import AUTHKEY
+
+def get_data(path: str) -> dict:
+    """Get dictionary of raw data from ODOT's TripCheck API."""
+    if path[0] != '/':
+        path = f"/{path}"
+    request_url = f"http://api.odot.state.or.us/tripcheck/{path}"
+    response = requests.get(request_url, headers={'Ocp-Apim-Subscription-Key':AUTHKEY})
+    response.raise_for_status()
+    return json.loads(response.text)
 
 def get_cls_inventory_df():
     request_url = f"http://api.odot.state.or.us/tripcheck/Cls/Inventory"
-    response = requests.get(request_url, headers={'Ocp-Apim-Subscription-Key':AUTHKEY})
-    data = json.loads(response.text)
+    data = get_data(path='/Cls/Inventory')
     last_updated = data['organization-information']['last-update-time']
 
     cls_inventory = data['cls-inventory-items']

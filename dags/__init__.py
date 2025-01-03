@@ -1,6 +1,8 @@
 from dagster import AssetSelection, DefaultScheduleStatus, Definitions, ScheduleDefinition, load_assets_from_package_module
 from dags import assets
-from dags.io_managers import PostgresIOManager
+from dagster_aws.s3 import S3PickleIOManager, S3Resource
+
+from dags.consts import RAW_BUCKET_NAME
 
 
 # Detector Data every 2 min
@@ -24,15 +26,26 @@ cls_schedule = ScheduleDefinition(
     cron_schedule="*/10 * * * *",
     default_status=DefaultScheduleStatus.RUNNING,
 )
+# Incidents every 30s, just use a minute for now since an incident wont likely last longer than 30s
+incidents_schedule = ScheduleDefinition(
+    name="incidents_schedule",
+    target=AssetSelection.keys("incidents"),
+    cron_schedule="*/1 * * * *",
+    default_status=DefaultScheduleStatus.RUNNING,
+)
 
 defs = Definitions(
     assets=load_assets_from_package_module(assets),
     schedules=[
         detector_schedule,
         rwis_schedule,
-        cls_schedule
+        cls_schedule,
+        incidents_schedule
     ],
     resources = {
-        'postgres_io_manager': PostgresIOManager()
+        "io_manager": S3PickleIOManager(
+            s3_resource=S3Resource(),
+            s3_bucket=RAW_BUCKET_NAME,
+        )
     }
 )
