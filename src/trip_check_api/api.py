@@ -12,4 +12,3 @@ def get(path: str) -> dict:
     response = requests.get(request_url, headers={'Ocp-Apim-Subscription-Key':AUTHKEY})
     response.raise_for_status()
     return json.loads(response.text)
-

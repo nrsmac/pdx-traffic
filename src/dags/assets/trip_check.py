@@ -9,10 +9,6 @@ def incidents(context: AssetExecutionContext):
     data = tc.get(f"/Incidents?Bounds={PDX_BOUNDS}")
     upload_dataframe_to_s3(data, RAW_BUCKET_NAME, key=get_materialization_key(context))
 
-@asset(compute_kind='source')
-def metadata_all_incident(context: AssetExecutionContext):
-    data = tc.get(f"/Incidents/Metadata")
-    upload_dataframe_to_s3(data, RAW_BUCKET_NAME, key=get_materialization_key(context))
 
 @asset(compute_kind='source')
 def traffic_detector_inventory(context: AssetExecutionContext):
