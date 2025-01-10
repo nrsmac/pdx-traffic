@@ -1,3 +1,4 @@
+from enum import Enum
 from pprint import pprint
 from trip_check_api import api
 
@@ -22,7 +23,7 @@ def get_metadata_tle_and_waze_incidents():
     data = api.get(f"/Tle/TleWazeMetadata")
     return data
 
-def get_metadata():
+def get_all_metadata_json():
     return {
         'all_incidents': get_metadata_all_incidents(),
         'road_and_weather': get_metadata_road_and_weather(),
@@ -30,5 +31,17 @@ def get_metadata():
         'tle_and_waze_incidents': get_metadata_tle_and_waze_incidents()
     }
 
+def get_travel_impact_descriptions(tle_metadata: dict):
+    raw_travel_impacts = tle_metadata['TLE-incident-items']['TLE-travel-impact-list']
+    flat_travel_impacts = {}
+    for _dict in raw_travel_impacts:
+        code = _dict['impact-id']
+        description = _dict['impact-desc']
+        flat_travel_impacts[description] = code
+        
+    print(flat_travel_impacts)
+    return Enum('TravelImpactDescriptions', flat_travel_impacts)
+
 if __name__ == "__main__":
-    pprint(get_metadata())
+    tle_metadata = get_metadata_tle_and_waze_incidents()
+    pprint(get_travel_impact_descriptions(tle_metadata=tle_metadata))
