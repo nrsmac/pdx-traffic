@@ -2,7 +2,7 @@ from dagster import AssetSelection, DefaultScheduleStatus, Definitions, Schedule
 from dags import assets
 from dagster_aws.s3 import S3PickleIOManager, S3Resource
 
-from dags.consts import RAW_BUCKET_NAME
+from trip_check_api.consts import RAW_BUCKET_NAME
 
 
 # Detector Data every 2 min

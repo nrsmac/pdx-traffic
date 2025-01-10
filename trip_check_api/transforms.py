@@ -1,21 +1,12 @@
 import json
-import pandas as pd
 import requests
+from trip_check_api.consts import AUTHKEY, PDX_BOUNDS
+from trip_check_api.api import get
 
-from dags.consts import AUTHKEY
-
-def get_data(path: str) -> dict:
-    """Get dictionary of raw data from ODOT's TripCheck API."""
-    if path[0] != '/':
-        path = f"/{path}"
-    request_url = f"http://api.odot.state.or.us/tripcheck/{path}"
-    response = requests.get(request_url, headers={'Ocp-Apim-Subscription-Key':AUTHKEY})
-    response.raise_for_status()
-    return json.loads(response.text)
 
 def get_cls_inventory_df():
     request_url = f"http://api.odot.state.or.us/tripcheck/Cls/Inventory"
-    data = get_data(path='/Cls/Inventory')
+    data = get(path='/Cls/Inventory')
     last_updated = data['organization-information']['last-update-time']
 
     cls_inventory = data['cls-inventory-items']
@@ -116,4 +107,3 @@ def _cast_object_columns_to_string(df) -> pd.DataFrame:
     object_columns = df.select_dtypes(include=['object']).columns
     df[object_columns] = df[object_columns].astype(str)
     return df
-
