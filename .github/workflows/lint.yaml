@@ -23,9 +23,7 @@ jobs:
               run: uv python install
 
             - name: Install the project
-              run: uv sync group --dev
+              run: uv sync --group dev
 
-            - name: Run Lint (pre-commit)
-              uses: pre-commit/action@v3.0.1
-              with:
-                extra_args: --all-files
+            - name: Install the project
+              run: uv run pre-commit run --all-files
