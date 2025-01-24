@@ -25,5 +25,8 @@ jobs:
             - name: Install the project
               run: uv sync --group dev
 
-            - name: Install the project
-              run: uv run pre-commit run --all-files
+            - name: Install Pre-commit Hooks
+              uses: pre-commit/action@v4.1.0
+
+            - name: Run Pre-commit
+              run: pre-commit run --all-files
