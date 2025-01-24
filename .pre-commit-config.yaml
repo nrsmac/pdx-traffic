@@ -1,0 +1,22 @@
+repos:
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v2.3.0
+    hooks:
+    -   id: check-yaml
+    -   id: end-of-file-fixer
+    -   id: trailing-whitespace
+-   repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.9.3
+    hooks:
+      - id: ruff
+        args: [ --fix ]
+      - id: ruff-format
+-   repo: https://github.com/pre-commit/mirrors-mypy
+    rev: ''  # Use the sha / tag you want to point at
+    hooks:
+    -   id: mypy
+-   repo: https://github.com/asottile/pyupgrade
+    rev: v2.37.0
+    hooks:
+      - id: pyupgrade #pyupgrade is a pre-commit hook that runs to check for issues in the code
+        args: [--py36-plus]
