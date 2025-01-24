@@ -12,7 +12,7 @@ run_launcher:
 
 storage:
   sqlite:
-    base_dir: 
+    base_dir:
       env: DAGSTER_HOME
 
 telemetry:

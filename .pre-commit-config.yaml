@@ -22,6 +22,7 @@ repos:
             --ignore-missing-imports,
             --config-file=./pyproject.toml,
           ]
+        additional_dependencies: ['types-requests']
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.4.0

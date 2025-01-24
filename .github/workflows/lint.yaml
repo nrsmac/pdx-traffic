@@ -13,6 +13,11 @@ jobs:
         steps:
             - uses: actions/checkout@v4
 
+            - name: Setup Git
+              run: |
+                apt-get update
+                apt-get install -y git
+
             - name: Install uv
               uses: astral-sh/setup-uv@v4
               with:
@@ -22,11 +27,8 @@ jobs:
             - name: Set up Python
               run: uv python install
 
-            - name: Install the project
-              run: uv sync --group dev
+            - name: Install project
+              run: uv sync --group lint
 
-            - name: Install Pre-commit Hooks
-              uses: pre-commit/action@v4.1.0
-
-            - name: Run Pre-commit
-              run: pre-commit run --all-files
+            - name: Run Lint (pre-commit)
+              run: uv run pre-commit run --all-files
