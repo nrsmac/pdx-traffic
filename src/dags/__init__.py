@@ -1,6 +1,12 @@
 from dags.assets import trip_check
-from dagster import AssetSelection, DefaultScheduleStatus, Definitions, ScheduleDefinition, load_assets_from_package_module
-from dags import assets
+from dagster import (
+    AssetSelection,
+    DefaultScheduleStatus,
+    Definitions,
+    ScheduleDefinition,
+    load_assets_from_package_module,
+)
+from dags import assets as assets
 from dagster_aws.s3 import S3PickleIOManager, S3Resource
 
 from trip_check_api.consts import RAW_BUCKET_NAME
@@ -36,17 +42,17 @@ incidents_schedule = ScheduleDefinition(
 )
 
 defs = Definitions(
-    assets=load_assets_from_package_module(trip_check, group_name='ODOT'),
+    assets=load_assets_from_package_module(trip_check, group_name="ODOT"),
     # schedules=[
     #     detector_schedule,
     #     rwis_schedule,
     #     cls_schedule,
     #     incidents_schedule
     # ],
-    resources = {
-        # "io_manager": S3PickleIOManager(
-        #     s3_resource=S3Resource(),
-        #     s3_bucket=RAW_BUCKET_NAME,
-        # )
-    }
+    resources={
+        "io_manager": S3PickleIOManager(
+            s3_resource=S3Resource(),
+            s3_bucket=RAW_BUCKET_NAME,
+        )
+    },
 )
