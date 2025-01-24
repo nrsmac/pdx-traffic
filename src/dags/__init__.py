@@ -7,9 +7,9 @@ from dagster import (
     load_assets_from_package_module,
 )
 from dags import assets as assets
-from dagster_aws.s3 import S3PickleIOManager, S3Resource
 
 from trip_check_api.consts import RAW_BUCKET_NAME
+from dagster_aws.s3 import S3PickleIOManager, S3Resource
 
 
 # Detector Data every 2 min
