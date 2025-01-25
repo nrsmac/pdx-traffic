@@ -1,5 +1,5 @@
 # PDX Traffic
-Analyzing traffic in the Porland Metro Area using open data. 
+Analyzing traffic in the Porland Metro Area using open data.
 
 ## Generate the trip-check-api client from the OpenAPI Spec:
 ```
