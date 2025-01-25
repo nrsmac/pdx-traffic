@@ -56,20 +56,6 @@ def travel_incident_types():
     upload_json_to_s3(json_=data, bucket_name=RAW_BUCKET_NAME, key=key)
 
 
-@job
-def metadata_job():
-    incident_event_types()
-    incident_event_subtypes()
-    road_condition_descriptions()
-    weather_condition_descriptions()
-    routes()
-    travel_impact_descriptions()
-    travel_incident_types()
-    traffic_detector_inventory()
-    cls_inventory()
-    rwis_inventory()
-
-
 @op
 def cls_inventory():
     data = cls.get_cls_inventory()
@@ -155,6 +141,20 @@ def traffic_detector_roadway():
 def traffic_detector_job():
     traffic_detector_ramp()
     traffic_detector_roadway()
+
+
+@job
+def metadata_job():
+    incident_event_types()
+    incident_event_subtypes()
+    road_condition_descriptions()
+    weather_condition_descriptions()
+    routes()
+    travel_impact_descriptions()
+    travel_incident_types()
+    traffic_detector_inventory()
+    cls_inventory()
+    rwis_inventory()
 
 
 all_jobs = [metadata_job, cls_job, incidents_job, rwis_job, traffic_detector_job]
