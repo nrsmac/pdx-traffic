@@ -28,4 +28,4 @@ def test_trip_check_api_collectors(function):
     result = function()
     assert result is not None
     assert len(result) > 0
-    sleep(2)
+    sleep(1)

@@ -6,7 +6,7 @@ ADD . /app
 
 # Sync the project into a new environment, using the frozen lockfile
 WORKDIR /app
-RUN uv sync --frozen
+RUN uv sync --frozen --group dags
 
 ENV DAGSTER_HOME /dagster_home
 CMD ["uv", "run", "dagster", "dev", "--host", "0.0.0.0"]
