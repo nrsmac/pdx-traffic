@@ -14,8 +14,8 @@ services:
       watch:
         # Sync the working directory with the `/app` directory in the container
         - action: sync
-          path: ./dags
-          target: /app/dags
+          path: ./src/
+          target: /app/src
           # Exclude the project virtual environment
           ignore:
             - .venv/
