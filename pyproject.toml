@@ -28,6 +28,7 @@ dev = [
 dags = [
     "dagster>=1.9.6",
     "dagster-aws>=0.25.6",
+    "sqlmesh[web]>=0.151.0",
 ]
 lint = [
     "mypy>=1.14.1",
